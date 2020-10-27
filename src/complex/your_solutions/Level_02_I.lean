@@ -6,7 +6,7 @@ Thanks: Imperial College London, leanprover-community
 -/
 
 -- import level 1
-import complex.Level_01_of_real
+import complex.your_solutions.Level_01_of_real
 
 /-! 
 
@@ -25,7 +25,7 @@ tactics in the `begin end` block.
 namespace complex
 
 /-- complex.I is the square root of -1 above the imaginary axis -/
-def I : ℂ := sorry
+def I : ℂ := ⟨0, 1⟩
 
 /-
 
@@ -37,24 +37,29 @@ def I : ℂ := sorry
 /-- re(I) = 0 -/
 @[simp] lemma I_re : re(I) = 0 :=
 begin
-  sorry
+  rw I,
 end
 
 /-- im(I) = 1 -/
 @[simp] lemma I_im : im(I) = 1 :=
 begin
-  sorry
+  rw I,
 end
 
 /-- I*I = -1 -/
 @[simp] lemma I_mul_I : I * I = -1 :=
 begin
-  sorry
+  ext;
+  simp,
 end
 
-lemma mk_eq_add_mul_I (a b : ℝ) : (⟨a, b⟩ : ℂ) = a + b * I := sorry
+lemma mk_eq_add_mul_I (a b : ℝ) : (⟨a, b⟩ : ℂ) = a + b * I := begin
+  ext; simp,
+end
 
-@[simp] lemma re_add_im (z : ℂ) : (z.re : ℂ) + z.im * I = z := sorry
+@[simp] lemma re_add_im (z : ℂ) : (z.re : ℂ) + z.im * I = z := begin
+  ext; simp,
+end
 
 
 /-
@@ -67,7 +72,12 @@ lemma mk_eq_add_mul_I (a b : ℝ) : (⟨a, b⟩ : ℂ) = a + b * I := sorry
 /-- I is non-zero -/
 lemma I_ne_zero : (I : ℂ) ≠ 0 :=
 begin
-  sorry
+  intro,
+  rw ext_iff at a,
+  destruct a,
+  intros,
+  simp at right,
+  exact right,
 end
 
 end complex

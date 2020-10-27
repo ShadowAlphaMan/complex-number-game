@@ -6,7 +6,7 @@ Thanks: Imperial College London, leanprover-community
 -/
 
 -- Import levels 1 to 4
-import complex.Level_04_norm_sq
+import complex.your_solutions.Level_04_norm_sq
 
 /-
 If you know what "the reals don't have decidable
@@ -31,7 +31,7 @@ usual definition, where 0⁻¹ is simply not defined at all.
 
 -/
 /-- The inverse of a complex number-/
-def inv (z : ℂ) : ℂ := sorry
+def inv (z : ℂ) : ℂ := z.conj * (1/ z.norm_sq :ℝ)
 
 -- notation for inverse
 instance : has_inv ℂ := ⟨inv⟩
@@ -39,9 +39,41 @@ instance : has_inv ℂ := ⟨inv⟩
 /-- The complex numbers are a field -/
 instance : field ℂ :=
 { inv := has_inv.inv,
-  inv_zero := begin sorry end,
-  zero_ne_one := begin sorry end, 
-  mul_inv_cancel := begin sorry end,
+  inv_zero := begin
+      unfold has_inv.inv,
+      unfold inv,
+      simp,
+   end,
+  zero_ne_one := begin
+      intro,
+      rw ext_iff at a,
+      cases a,
+      simp at a_left,
+      unfold comm_ring.zero at a_left,
+      unfold comm_ring.one at a_left,
+      simp at a_left,
+      apply a_left,
+   end, 
+  mul_inv_cancel := begin
+      intros,
+      simp,
+      unfold comm_ring.one,
+      unfold has_inv.inv,
+      unfold inv,
+      rw <-mul_assoc,
+      rw mul_conj,
+      rw <-of_real_mul,
+      ext;
+      simp,
+      simp at a_1,
+      unfold comm_ring.zero at a_1,
+      apply mul_inv_cancel,
+      have h : a.norm_sq ≠ 0 ↔ a ≠ 0,
+      apply not_congr,
+      exact norm_sq_eq_zero,
+      rw h,
+      exact a_1,
+  end,
   ..complex.comm_ring }
 
 end complex
